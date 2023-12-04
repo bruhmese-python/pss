@@ -3,7 +3,7 @@ all: generate compile
 generate:
 	flex pcss.l 
 compile:
-	gcc lex.yy.c -o pcss
+	g++ lex.yy.c -o pcss
 #generate:
 #	flex pcss.l && bison -dy pcss.y
 #compile:
