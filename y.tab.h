@@ -39,7 +39,7 @@
 # define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -54,7 +54,18 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    NUM = 258                      /* NUM  */
+    OPENING_BRACES = 258,          /* OPENING_BRACES  */
+    CLOSING_BRACES = 259,          /* CLOSING_BRACES  */
+    PROPERTY_NAME = 260,           /* PROPERTY_NAME  */
+    IDENTIFIER = 261,              /* IDENTIFIER  */
+    PROPERTY_SEPARATOR = 262,      /* PROPERTY_SEPARATOR  */
+    PAIR_SEPARATOR = 263,          /* PAIR_SEPARATOR  */
+    CLASS_NAME = 264,              /* CLASS_NAME  */
+    ASSIGN = 265,                  /* ASSIGN  */
+    EXTENDS = 266,                 /* EXTENDS  */
+    TEXT = 267,                    /* TEXT  */
+    WHITESPACE = 268,              /* WHITESPACE  */
+    COMMENT = 269                  /* COMMENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -63,11 +74,31 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define NUM 258
+#define OPENING_BRACES 258
+#define CLOSING_BRACES 259
+#define PROPERTY_NAME 260
+#define IDENTIFIER 261
+#define PROPERTY_SEPARATOR 262
+#define PAIR_SEPARATOR 263
+#define CLASS_NAME 264
+#define ASSIGN 265
+#define EXTENDS 266
+#define TEXT 267
+#define WHITESPACE 268
+#define COMMENT 269
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 18 "pss.y"
+
+    char* string;
+
+#line 99 "y.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

@@ -1,10 +1,12 @@
+card_padding = 50px;
+
 .flex-container {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: start;
   align-items: auto;
-  align-content: start
+  align-content: start;
 }
 
 .flex-item {
@@ -12,15 +14,12 @@
   margin: 10px;
 }
 
- .sidebar{
-   /*margin-top : 5px;
-   margin-bottom : 5px;*/
-/*border-top-left-radius:0px;
-   border-bottom-left-radius:0px;*/
+/*margin-top : 5px;
+margin-bottom : 5px;*/
+.sidebar extends .flex-item{
    padding-top : 10px;
    padding-bottom : 10px;
    height: 100vh;
-   /*box-shadow: -4px 0px 27px 1px #000;*/
  }
 
  /* small header */
@@ -29,7 +28,7 @@
    padding-bottom: 5px;
   }
 /* items list */
-.nav-pills .nav-link,
+.nav-pills .nav-link
 .nav-pills .nav-link {
   width:100%;
 }

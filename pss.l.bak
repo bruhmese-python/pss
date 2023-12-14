@@ -14,7 +14,7 @@ EQUALS "="
 %%
 \{      { printf("<opening braces>");}
 \}      { printf("<closing braces>");}
-{IDENTIFIER} 				{ id_buffer += yytext;if(id_buffer!=keyword) BEGIN(property); }
+{IDENTIFIER} 				{ id_buffer += yytext;if(id_buffer!="extends") BEGIN(property); }
 <property>{WHITESPACE}*/:		{ printf("\n\n<property-name: %s>",id_buffer.c_str());id_buffer.clear();BEGIN(INITIAL);}
 <property>(-[A-Za-z_0-9]+)* 		{ printf("\n\n<property-name-with-hyphen: %s%s>",id_buffer.c_str(),yytext);id_buffer.clear();BEGIN(INITIAL);}
 <property>{WHITESPACE}*/.		{ printf("\n\n<identifier: %s>",id_buffer.c_str());id_buffer.clear();BEGIN(INITIAL);}

@@ -1,10 +1,9 @@
 all: generate compile
-
 generate:
-	flex pcss.l 
+	flex pss.l && bison -t -dy pss.y
 compile:
-	g++ lex.yy.c -o pcss
-#generate:
-#	flex pcss.l && bison -dy pcss.y
-#compile:
-#	gcc lex.yy.c y.tab.c -o pcss
+	gcc lex.yy.c y.tab.c -o pss
+clean:
+	rm ./pss
+	rm y.tab.c y.tab.h
+	rm lex.yy.c 
