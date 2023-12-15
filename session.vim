@@ -887,10 +887,10 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 1 + 24) / 49)
-exe '2resize ' . ((&lines * 44 + 24) / 49)
+exe '1resize ' . ((&lines * 2 + 24) / 49)
+exe '2resize ' . ((&lines * 43 + 24) / 49)
 argglobal
-terminal ++curwin ++cols=193 ++rows=1 
+terminal ++curwin ++cols=193 ++rows=2 
 let s:term_buf_11 = bufnr()
 balt /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.y
 setlocal keymap=
@@ -1017,12 +1017,12 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 0) / 1)
+let s:l = 2 - ((0 * winheight(0) + 1) / 2)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
-normal! 0
+keepjumps 2
+normal! 035|
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 argglobal
@@ -1152,17 +1152,17 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 19 - ((16 * winheight(0) + 22) / 44)
+let s:l = 41 - ((5 * winheight(0) + 21) / 43)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 19
-normal! 0
+keepjumps 41
+normal! 02|
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 2wincmd w
-exe '1resize ' . ((&lines * 1 + 24) / 49)
-exe '2resize ' . ((&lines * 44 + 24) / 49)
+exe '1resize ' . ((&lines * 2 + 24) / 49)
+exe '2resize ' . ((&lines * 43 + 24) / 49)
 tabnext 2
 set stal=1
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/Makefile

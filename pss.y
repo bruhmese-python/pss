@@ -43,9 +43,9 @@ int yylex(void);
 css: opt_whitespace css 
 	| variable css 
 	| class_definition css
-	| COMMENT css  
+	| comment css  
 	| class_definition
-	| COMMENT {printf("\ncomment detected");}
+	| comment 
 	;
 
 class_definition:  class_names opt_extends_class_names open_brace opt_whitespace property_pairs CLOSING_BRACES opt_whitespace opt_eof;
@@ -84,6 +84,8 @@ opt_whitespace: EMPTY
 	      | WHITESPACE opt_whitespace 
 	      ;
 		
+comment: COMMENT {printf("%s",$1);}
+
 opt_eof:  EMPTY 
         | YYEOF
 	;

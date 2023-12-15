@@ -14,7 +14,7 @@ card_padding = 50px;
   margin: 10px;
 }
 
-/*margin-top : 5px;
+/*margin-top : 5px; why the fuck are comments not getting parsed ????
 margin-bottom : 5px;*/
 .sidebar extends .flex-item{
    padding-top : 10px;

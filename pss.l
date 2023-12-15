@@ -1,5 +1,6 @@
 %{
 #include<string.h>
+#include<iostream>
 #include<stdbool.h>
 #include "y.tab.h"
 
@@ -21,6 +22,7 @@ int is_keyword(){
 int parse_comment(){
 	if(commented){
 		yylval.string = strdup(yytext); 
+		//std::cout<< "comment detected was "<<yytext;
 		return COMMENT;
 	}
 	return -1;
@@ -38,8 +40,8 @@ COMMENT_END "*/"
 %option noyywrap
 
 %%
-\{      { return OPENING_BRACES;}
-\}      { return CLOSING_BRACES;}
+\{      				{ RETURN_IF_INVALID(parse_comment()); return OPENING_BRACES;}
+\}      				{ RETURN_IF_INVALID(parse_comment()); return CLOSING_BRACES;}
 {IDENTIFIER} 				{ 
 						RETURN_IF_INVALID(parse_comment());
 						int keyword = is_keyword();
@@ -55,11 +57,11 @@ COMMENT_END "*/"
 					RETURN_IF_INVALID(parse_comment());  BEGIN(INITIAL);yylval.string = strdup(id_buffer);return IDENTIFIER;
 					}
 \.{IDENTIFIER}(-[A-Za-z_0-9]+)* 	{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext);return CLASS_NAME;}
-{COMMENT_BEGIN}				{ commented=true; return COMMENT; }
-{COMMENT_END}				{ commented=false; }
-;		{ RETURN_IF_INVALID(parse_comment());  return PROPERTY_SEPARATOR; }
-:		{ RETURN_IF_INVALID(parse_comment());  return PAIR_SEPARATOR; }
-{WHITESPACE} 	{ RETURN_IF_INVALID(parse_comment());  return WHITESPACE;}
-= 		{ RETURN_IF_INVALID(parse_comment());  return ASSIGN;}
-.		{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext); return TEXT; }
+{COMMENT_BEGIN}				{ commented=true; printf("\n");	ECHO; }
+{COMMENT_END}				{ commented=false;		ECHO; }
+;					{ RETURN_IF_INVALID(parse_comment());  return PROPERTY_SEPARATOR; }
+:					{ RETURN_IF_INVALID(parse_comment());  return PAIR_SEPARATOR; }
+{WHITESPACE} 				{ RETURN_IF_INVALID(parse_comment());  return WHITESPACE;}
+= 					{ RETURN_IF_INVALID(parse_comment());  return ASSIGN;}
+.					{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext); return TEXT; }
 %%
