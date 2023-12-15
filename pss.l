@@ -3,6 +3,14 @@
 #include<stdbool.h>
 #include "y.tab.h"
 
+#define RETURN_IF_INVALID(x)\
+do{\
+	int _ret = (x);\
+	if(_ret!=-1)\
+		return _ret;\
+}while(0)
+
+
 char id_buffer[256]= "\0";
 bool commented = false;
 
@@ -10,6 +18,15 @@ int is_keyword(){
 	if(strcmp(yytext,"extends")==0) {return EXTENDS;}
 	return -1;
 }
+int parse_comment(){
+	if(commented){
+		yylval.string = strdup(yytext); 
+		return COMMENT;
+	}
+	return -1;
+}
+
+int yylex(void);
 %}
 
 IDENTIFIER [A-Za-z_]+[A-Za-z_0-9]*
@@ -18,12 +35,13 @@ COMMENT_BEGIN "/*"
 COMMENT_END "*/"
 
 %x property
+%option noyywrap
 
 %%
 \{      { return OPENING_BRACES;}
 \}      { return CLOSING_BRACES;}
 {IDENTIFIER} 				{ 
-						if(commented) return COMMENT; 
+						RETURN_IF_INVALID(parse_comment());
 						int keyword = is_keyword();
 						if(keyword != -1) {return keyword;}
 						else { 
@@ -31,14 +49,17 @@ COMMENT_END "*/"
 							BEGIN(property);
 						}
 					}
-<property>(-[A-Za-z_0-9]+)*/{WHITESPACE}*: 		{ if(commented) return COMMENT; BEGIN(INITIAL);strcat(id_buffer,yytext);yylval.string = strdup(id_buffer);return PROPERTY_NAME;}
-<property>{WHITESPACE}*/.		{ if(commented) return COMMENT; BEGIN(INITIAL);strcat(id_buffer,yytext);yylval.string = strdup(id_buffer);return IDENTIFIER;}
-\.{IDENTIFIER}(-[A-Za-z_0-9]+)* 	{ if(commented) return COMMENT; /*printf("class: %s",yytext);*/yylval.string = strdup(yytext);return CLASS_NAME;}
+<property>(-[A-Za-z_0-9]+)*/{WHITESPACE}*: 		{ RETURN_IF_INVALID(parse_comment());  BEGIN(INITIAL);strcat(id_buffer,yytext);yylval.string = strdup(id_buffer);return PROPERTY_NAME;}
+<property>{WHITESPACE}*/.		{ 
+					/*this idiom up above works for 'anything else a.k.a .*'*/
+					RETURN_IF_INVALID(parse_comment());  BEGIN(INITIAL);yylval.string = strdup(id_buffer);return IDENTIFIER;
+					}
+\.{IDENTIFIER}(-[A-Za-z_0-9]+)* 	{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext);return CLASS_NAME;}
 {COMMENT_BEGIN}				{ commented=true; return COMMENT; }
 {COMMENT_END}				{ commented=false; }
-;		{ if(commented) return COMMENT; return PROPERTY_SEPARATOR; }
-:		{ if(commented) return COMMENT; return PAIR_SEPARATOR; }
-{WHITESPACE} 	{ if(commented) return COMMENT; return WHITESPACE;}
-= 		{ if(commented) return COMMENT; return ASSIGN;}
-.		{ if(commented) return COMMENT; return TEXT; }
+;		{ RETURN_IF_INVALID(parse_comment());  return PROPERTY_SEPARATOR; }
+:		{ RETURN_IF_INVALID(parse_comment());  return PAIR_SEPARATOR; }
+{WHITESPACE} 	{ RETURN_IF_INVALID(parse_comment());  return WHITESPACE;}
+= 		{ RETURN_IF_INVALID(parse_comment());  return ASSIGN;}
+.		{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext); return TEXT; }
 %%

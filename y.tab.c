@@ -71,6 +71,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 bool extends_mode_on = false;
 
@@ -78,11 +79,14 @@ void register_class(const char* s){
 	if(extends_mode_on)
 		printf("<inheriting class:%s>",s);
 	else
-		printf("<class:%s>",s);
+		printf("\n<class:%s>",s);
 }
 
+void yyerror(const char* s);
+int yylex(void);
 
-#line 86 "y.tab.c"
+
+#line 90 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -163,11 +167,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "pss.y"
+#line 22 "pss.y"
 
     char* string;
 
-#line 171 "y.tab.c"
+#line 175 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -203,18 +207,17 @@ enum yysymbol_kind_t
   YYSYMBOL_YYACCEPT = 15,                  /* $accept  */
   YYSYMBOL_css = 16,                       /* css  */
   YYSYMBOL_class_definition = 17,          /* class_definition  */
-  YYSYMBOL_variables = 18,                 /* variables  */
-  YYSYMBOL_variable = 19,                  /* variable  */
-  YYSYMBOL_open_brace = 20,                /* open_brace  */
-  YYSYMBOL_class_names = 21,               /* class_names  */
-  YYSYMBOL_opt_extends_class_names = 22,   /* opt_extends_class_names  */
-  YYSYMBOL_extends = 23,                   /* extends  */
-  YYSYMBOL_property_pairs = 24,            /* property_pairs  */
-  YYSYMBOL_property_pair = 25,             /* property_pair  */
-  YYSYMBOL_valid_value = 26,               /* valid_value  */
-  YYSYMBOL_EMPTY = 27,                     /* EMPTY  */
-  YYSYMBOL_opt_whitespace = 28,            /* opt_whitespace  */
-  YYSYMBOL_opt_eof = 29                    /* opt_eof  */
+  YYSYMBOL_variable = 18,                  /* variable  */
+  YYSYMBOL_open_brace = 19,                /* open_brace  */
+  YYSYMBOL_class_names = 20,               /* class_names  */
+  YYSYMBOL_opt_extends_class_names = 21,   /* opt_extends_class_names  */
+  YYSYMBOL_extends = 22,                   /* extends  */
+  YYSYMBOL_property_pairs = 23,            /* property_pairs  */
+  YYSYMBOL_property_pair = 24,             /* property_pair  */
+  YYSYMBOL_valid_value = 25,               /* valid_value  */
+  YYSYMBOL_EMPTY = 26,                     /* EMPTY  */
+  YYSYMBOL_opt_whitespace = 27,            /* opt_whitespace  */
+  YYSYMBOL_opt_eof = 28                    /* opt_eof  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -534,18 +537,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  16
+#define YYFINAL  15
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   56
+#define YYLAST   53
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  15
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  15
+#define YYNNTS  14
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  33
+#define YYNRULES  30
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  60
+#define YYNSTATES  57
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   269
@@ -595,10 +598,10 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    37,    37,    38,    39,    40,    41,    42,    44,    46,
-      47,    49,    51,    53,    54,    55,    57,    57,    59,    61,
-      62,    63,    65,    67,    68,    69,    70,    71,    72,    75,
-      76,    76,    77,    77
+       0,    43,    43,    44,    45,    46,    47,    48,    51,    53,
+      55,    57,    58,    59,    62,    63,    66,    68,    69,    70,
+      73,    75,    76,    77,    78,    79,    82,    83,    84,    87,
+      88
 };
 #endif
 
@@ -619,9 +622,9 @@ yysymbol_name (yysymbol_kind_t yysymbol)
   "CLOSING_BRACES", "PROPERTY_NAME", "IDENTIFIER", "PROPERTY_SEPARATOR",
   "PAIR_SEPARATOR", "CLASS_NAME", "ASSIGN", "EXTENDS", "TEXT",
   "WHITESPACE", "COMMENT", "$accept", "css", "class_definition",
-  "variables", "variable", "open_brace", "class_names",
-  "opt_extends_class_names", "extends", "property_pairs", "property_pair",
-  "valid_value", "EMPTY", "opt_whitespace", "opt_eof", YY_NULLPTR
+  "variable", "open_brace", "class_names", "opt_extends_class_names",
+  "extends", "property_pairs", "property_pair", "valid_value", "EMPTY",
+  "opt_whitespace", "opt_eof", YY_NULLPTR
   };
   return yy_sname[yysymbol];
 }
@@ -637,12 +640,12 @@ static const yytype_int16 yytoknum[] =
 };
 #endif
 
-#define YYPACT_NINF (-11)
+#define YYPACT_NINF (-10)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-30)
+#define YYTABLE_NINF (-27)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -651,12 +654,12 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -2,    -8,     1,    -8,    -2,     8,    -2,    -2,   -11,     6,
-     -11,    -2,    10,    21,   -11,   -11,   -11,   -11,   -11,    -2,
-     -11,    28,    -8,   -11,    -8,   -11,   -11,   -11,    -8,    21,
-      12,    29,   -11,   -11,   -11,   -11,    16,    -8,    33,    -8,
-     -11,   -11,    -8,    32,    34,    -8,    36,   -11,    -8,    40,
-      -8,    12,   -11,   -11,   -11,    29,    20,    -8,   -11,   -11
+       0,    10,    15,    10,     0,    12,     0,     0,    18,   -10,
+       0,    20,    22,   -10,   -10,   -10,   -10,   -10,   -10,    31,
+      10,   -10,   -10,    10,   -10,   -10,    10,    22,     9,    32,
+     -10,   -10,   -10,     4,    10,    35,    10,   -10,   -10,    10,
+      29,    37,    10,    33,   -10,    10,    43,    10,     9,   -10,
+     -10,   -10,    32,    14,    10,   -10,   -10
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -664,26 +667,26 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,    29,    13,    29,     7,     0,     6,     0,     9,    16,
-      30,     0,     0,    14,    31,     5,     1,     4,     3,     0,
-      18,     0,    29,     2,    29,    15,     9,    12,    29,     0,
-       0,     0,    17,    24,    23,    25,    29,    29,     0,    29,
-      27,    26,    28,     0,     0,    29,    20,    11,    29,    29,
-      29,     0,    33,    32,     8,    19,    22,    29,    28,    21
+       0,    26,    11,    26,     7,     0,     6,     0,    26,    27,
+       0,     0,    12,    28,     5,     1,     4,     3,    16,     0,
+      26,    14,     2,    26,    13,    10,    26,     0,     0,     0,
+      15,    22,    21,    26,    26,     0,    26,    24,    23,    25,
+       0,     0,    26,    18,     9,    26,    26,    26,     0,    30,
+      29,     8,    17,    20,    26,    25,    19
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -11,     9,   -11,   -11,    26,   -11,   -10,   -11,   -11,    -9,
-     -11,    -3,     2,    -1,   -11
+     -10,     1,   -10,   -10,   -10,    -9,   -10,   -10,    -5,   -10,
+       2,    -4,    -1,   -10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,    23,     6,     7,     8,    28,     9,    21,    22,    38,
-      39,    36,    10,    11,    54
+       0,     5,     6,     7,    26,     8,    19,    20,    35,    36,
+      33,     9,    10,    51
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -691,52 +694,52 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      12,    13,    14,    25,     1,     3,    19,     2,    16,     5,
-     -29,     3,     4,    15,     3,    17,    18,    20,    33,    32,
-      24,    29,    40,    30,    34,    35,    40,    31,    41,    42,
-       2,    27,    41,    58,    37,    43,    44,    45,    46,    47,
-      52,    14,    48,    50,    49,    26,    57,    51,    56,    55,
-       0,    53,     0,     0,     0,     0,    59
+      11,    12,    13,    24,    21,    14,     1,    16,    17,     2,
+      37,    22,    15,     3,     4,    31,    38,    39,    30,    27,
+      37,    32,    28,     3,   -26,    29,    38,    55,     3,    18,
+      23,     2,    40,    41,    25,    43,    44,    34,    13,    42,
+      47,    46,    50,    49,    48,    45,    52,    54,     0,     0,
+      53,     0,     0,    56
 };
 
 static const yytype_int8 yycheck[] =
 {
-       1,     2,     3,    13,     6,    13,     7,     9,     0,     0,
-       9,    13,    14,     4,    13,     6,     7,    11,     6,    29,
-      10,    22,     6,    24,    12,    13,     6,    28,    12,    13,
-       9,     3,    12,    13,     5,    36,    37,     4,    39,     7,
-       0,    42,     8,     7,    45,    19,    55,    48,    51,    50,
-      -1,    49,    -1,    -1,    -1,    -1,    57
+       1,     2,     3,    12,     8,     4,     6,     6,     7,     9,
+       6,    10,     0,    13,    14,     6,    12,    13,    27,    20,
+       6,    12,    23,    13,     9,    26,    12,    13,    13,    11,
+      10,     9,    33,    34,     3,    36,     7,     5,    39,     4,
+       7,    42,    46,     0,    45,     8,    47,    52,    -1,    -1,
+      48,    -1,    -1,    54
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     6,     9,    13,    14,    16,    17,    18,    19,    21,
-      27,    28,    28,    28,    28,    16,     0,    16,    16,    28,
-      11,    22,    23,    16,    10,    21,    19,     3,    20,    28,
-      28,    28,    21,     6,    12,    13,    26,     5,    24,    25,
-       6,    12,    13,    28,    28,     4,    28,     7,     8,    28,
-       7,    28,     0,    27,    29,    28,    26,    24,    13,    28
+       0,     6,     9,    13,    14,    16,    17,    18,    20,    26,
+      27,    27,    27,    27,    16,     0,    16,    16,    11,    21,
+      22,    26,    16,    10,    20,     3,    19,    27,    27,    27,
+      20,     6,    12,    25,     5,    23,    24,     6,    12,    13,
+      27,    27,     4,    27,     7,     8,    27,     7,    27,     0,
+      26,    28,    27,    25,    23,    13,    27
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
        0,    15,    16,    16,    16,    16,    16,    16,    17,    18,
-      18,    19,    20,    21,    21,    21,    22,    22,    23,    24,
-      24,    24,    25,    26,    26,    26,    26,    26,    26,    27,
-      28,    28,    29,    29
+      19,    20,    20,    20,    21,    21,    22,    23,    23,    23,
+      24,    25,    25,    25,    25,    25,    26,    27,    27,    28,
+      28
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     2,     2,     2,     2,     1,     1,     8,     1,
-       3,     7,     1,     1,     2,     3,     0,     3,     1,     4,
-       2,     6,     5,     1,     1,     1,     2,     2,     2,     0,
-       1,     2,     1,     1
+       0,     2,     2,     2,     2,     2,     1,     1,     8,     7,
+       1,     1,     2,     3,     1,     3,     1,     4,     2,     6,
+       5,     1,     1,     2,     2,     2,     0,     1,     2,     1,
+       1
 };
 
 
@@ -1266,61 +1269,73 @@ yyreduce:
   switch (yyn)
     {
   case 7: /* css: COMMENT  */
-#line 42 "pss.y"
-                {printf("\ncomment detected");}
-#line 1272 "y.tab.c"
+#line 48 "pss.y"
+                  {printf("\ncomment detected");}
+#line 1275 "y.tab.c"
     break;
 
-  case 11: /* variable: IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt_whitespace PROPERTY_SEPARATOR  */
-#line 49 "pss.y"
-                                                                                                        {printf(" <variable: %s>",(yyvsp[-6].string));}
-#line 1278 "y.tab.c"
-    break;
-
-  case 12: /* open_brace: OPENING_BRACES  */
-#line 51 "pss.y"
-                           {extends_mode_on = false;}
-#line 1284 "y.tab.c"
-    break;
-
-  case 13: /* class_names: CLASS_NAME  */
+  case 9: /* variable: IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt_whitespace PROPERTY_SEPARATOR  */
 #line 53 "pss.y"
-                                                        {register_class((yyvsp[0].string));}
-#line 1290 "y.tab.c"
+                                                                                                        {printf("<variable[%s] : %s>",(yyvsp[-6].string),(yyvsp[-2].string));}
+#line 1281 "y.tab.c"
     break;
 
-  case 14: /* class_names: CLASS_NAME opt_whitespace  */
-#line 54 "pss.y"
-                                                        {register_class((yyvsp[-1].string));}
-#line 1296 "y.tab.c"
-    break;
-
-  case 15: /* class_names: CLASS_NAME opt_whitespace class_names  */
+  case 10: /* open_brace: OPENING_BRACES  */
 #line 55 "pss.y"
-                                                        {register_class((yyvsp[-2].string));}
-#line 1302 "y.tab.c"
+                           {extends_mode_on = false;}
+#line 1287 "y.tab.c"
     break;
 
-  case 18: /* extends: EXTENDS  */
+  case 11: /* class_names: CLASS_NAME  */
+#line 57 "pss.y"
+                                                        {register_class((yyvsp[0].string));}
+#line 1293 "y.tab.c"
+    break;
+
+  case 12: /* class_names: CLASS_NAME opt_whitespace  */
+#line 58 "pss.y"
+                                                        {register_class((yyvsp[-1].string));}
+#line 1299 "y.tab.c"
+    break;
+
+  case 13: /* class_names: CLASS_NAME opt_whitespace class_names  */
 #line 59 "pss.y"
+                                                        {register_class((yyvsp[-2].string));}
+#line 1305 "y.tab.c"
+    break;
+
+  case 16: /* extends: EXTENDS  */
+#line 66 "pss.y"
                  {printf("<extends>");extends_mode_on = true;}
-#line 1308 "y.tab.c"
+#line 1311 "y.tab.c"
     break;
 
-  case 22: /* property_pair: PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whitespace valid_value  */
-#line 65 "pss.y"
-                                                                                      {printf("\n <property pair: %s>",(yyvsp[-4].string));}
-#line 1314 "y.tab.c"
+  case 20: /* property_pair: PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whitespace valid_value  */
+#line 73 "pss.y"
+                                                                                      {printf("\n<property pair: %s : %s>",(yyvsp[-4].string),(yyvsp[0].string));}
+#line 1317 "y.tab.c"
     break;
 
-  case 24: /* valid_value: IDENTIFIER  */
-#line 68 "pss.y"
-                        {printf("replaceable IDENTIFIER : %s",(yyvsp[0].string));}
-#line 1320 "y.tab.c"
+  case 23: /* valid_value: valid_value TEXT  */
+#line 77 "pss.y"
+                              {(yyval.string)=strcat((yyval.string),(yyvsp[0].string));}
+#line 1323 "y.tab.c"
+    break;
+
+  case 24: /* valid_value: valid_value IDENTIFIER  */
+#line 78 "pss.y"
+                                    {(yyval.string)=strcat((yyval.string),(yyvsp[0].string));}
+#line 1329 "y.tab.c"
+    break;
+
+  case 25: /* valid_value: valid_value WHITESPACE  */
+#line 79 "pss.y"
+                                    {(yyval.string)=strcat((yyval.string)," ");}
+#line 1335 "y.tab.c"
     break;
 
 
-#line 1324 "y.tab.c"
+#line 1339 "y.tab.c"
 
       default: break;
     }
@@ -1519,10 +1534,10 @@ yyreturn:
   return yyresult;
 }
 
-#line 79 "pss.y"
+#line 91 "pss.y"
 
 
-int yywrap(void) {}
+int yywrap(void) {return 1;}
 
 void yyerror(const char* s) {
     printf("\nError: %s\n", s);

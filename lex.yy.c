@@ -322,6 +322,9 @@ void yyfree ( void *  );
 #define YY_AT_BOL() (YY_CURRENT_BUFFER_LVALUE->yy_at_bol)
 
 /* Begin user sect3 */
+
+#define yywrap() (/*CONSTCOND*/1)
+#define YY_SKIP_YYWRAP
 typedef flex_uint8_t YY_CHAR;
 
 FILE *yyin = NULL, *yyout = NULL;
@@ -493,6 +496,14 @@ char *yytext;
 #include<stdbool.h>
 #include "y.tab.h"
 
+#define RETURN_IF_INVALID(x)\
+do{\
+	int _ret = (x);\
+	if(_ret!=-1)\
+		return _ret;\
+}while(0)
+
+
 char id_buffer[256]= "\0";
 bool commented = false;
 
@@ -500,9 +511,18 @@ int is_keyword(){
 	if(strcmp(yytext,"extends")==0) {return EXTENDS;}
 	return -1;
 }
-#line 504 "lex.yy.c"
+int parse_comment(){
+	if(commented){
+		yylval.string = strdup(yytext); 
+		return COMMENT;
+	}
+	return -1;
+}
 
-#line 506 "lex.yy.c"
+int yylex(void);
+#line 524 "lex.yy.c"
+
+#line 526 "lex.yy.c"
 
 #define INITIAL 0
 #define property 1
@@ -726,9 +746,9 @@ YY_DECL
 		}
 
 	{
-#line 22 "pss.l"
+#line 40 "pss.l"
 
-#line 732 "lex.yy.c"
+#line 752 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -810,19 +830,19 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 23 "pss.l"
+#line 41 "pss.l"
 { return OPENING_BRACES;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 24 "pss.l"
+#line 42 "pss.l"
 { return CLOSING_BRACES;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 25 "pss.l"
+#line 43 "pss.l"
 { 
-						if(commented) return COMMENT; 
+						RETURN_IF_INVALID(parse_comment());
 						int keyword = is_keyword();
 						if(keyword != -1) {return keyword;}
 						else { 
@@ -834,8 +854,8 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 34 "pss.l"
-{ if(commented) return COMMENT; BEGIN(INITIAL);strcat(id_buffer,yytext);yylval.string = strdup(id_buffer);return PROPERTY_NAME;}
+#line 52 "pss.l"
+{ RETURN_IF_INVALID(parse_comment());  BEGIN(INITIAL);strcat(id_buffer,yytext);yylval.string = strdup(id_buffer);return PROPERTY_NAME;}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
@@ -844,56 +864,59 @@ YY_LINENO_REWIND_TO(yy_cp - 1);
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 35 "pss.l"
-{ if(commented) return COMMENT; BEGIN(INITIAL);strcat(id_buffer,yytext);yylval.string = strdup(id_buffer);return IDENTIFIER;}
+#line 53 "pss.l"
+{ 
+					/*this idiom up above works for 'anything else a.k.a .*'*/
+					RETURN_IF_INVALID(parse_comment());  BEGIN(INITIAL);yylval.string = strdup(id_buffer);return IDENTIFIER;
+					}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 36 "pss.l"
-{ if(commented) return COMMENT; /*printf("class: %s",yytext);*/yylval.string = strdup(yytext);return CLASS_NAME;}
+#line 57 "pss.l"
+{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext);return CLASS_NAME;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 37 "pss.l"
+#line 58 "pss.l"
 { commented=true; return COMMENT; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 38 "pss.l"
+#line 59 "pss.l"
 { commented=false; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 39 "pss.l"
-{ if(commented) return COMMENT; return PROPERTY_SEPARATOR; }
+#line 60 "pss.l"
+{ RETURN_IF_INVALID(parse_comment());  return PROPERTY_SEPARATOR; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 40 "pss.l"
-{ if(commented) return COMMENT; return PAIR_SEPARATOR; }
+#line 61 "pss.l"
+{ RETURN_IF_INVALID(parse_comment());  return PAIR_SEPARATOR; }
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 41 "pss.l"
-{ if(commented) return COMMENT; return WHITESPACE;}
+#line 62 "pss.l"
+{ RETURN_IF_INVALID(parse_comment());  return WHITESPACE;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 42 "pss.l"
-{ if(commented) return COMMENT; return ASSIGN;}
+#line 63 "pss.l"
+{ RETURN_IF_INVALID(parse_comment());  return ASSIGN;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 43 "pss.l"
-{ if(commented) return COMMENT; return TEXT; }
+#line 64 "pss.l"
+{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext); return TEXT; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 44 "pss.l"
+#line 65 "pss.l"
 ECHO;
 	YY_BREAK
-#line 897 "lex.yy.c"
+#line 920 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(property):
 				yyterminate();
@@ -1872,6 +1895,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 44 "pss.l"
+#line 65 "pss.l"
 
 
