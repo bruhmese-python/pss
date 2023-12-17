@@ -1,4 +1,4 @@
-card_padding = 50px;
+$alert_padding = 5px;
 
 .flex-container {
   display: flex;
@@ -14,9 +14,10 @@ card_padding = 50px;
   margin: 10px;
 }
 
-/*margin-top : 5px; why the fuck are comments not getting parsed ????
+/*margin-top : 5px;  comments are getting parsed 
 margin-bottom : 5px;*/
 .sidebar extends .flex-item{
+   /*testing comment*/
    padding-top : 10px;
    padding-bottom : 10px;
    height: 100vh;
@@ -24,12 +25,12 @@ margin-bottom : 5px;*/
 
  /* small header */
  .alert.alert-warning {
-   padding-top: 5px;
-   padding-bottom: 5px;
+   padding-top: calc(alert_padding + 21px);
+   padding-bottom: alert_padding;
   }
 /* items list */
 .nav-pills .nav-link
-.nav-pills .nav-link {
+.nav-pills .nav-link extends .sidebar .flex-container{
   width:100%;
 }
 

@@ -59,9 +59,10 @@ COMMENT_END "*/"
 \.{IDENTIFIER}(-[A-Za-z_0-9]+)* 	{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext);return CLASS_NAME;}
 {COMMENT_BEGIN}				{ commented=true; printf("\n");	ECHO; }
 {COMMENT_END}				{ commented=false;		ECHO; }
-;					{ RETURN_IF_INVALID(parse_comment());  return PROPERTY_SEPARATOR; }
-:					{ RETURN_IF_INVALID(parse_comment());  return PAIR_SEPARATOR; }
-{WHITESPACE} 				{ RETURN_IF_INVALID(parse_comment());  return WHITESPACE;}
-= 					{ RETURN_IF_INVALID(parse_comment());  return ASSIGN;}
+;					{ RETURN_IF_INVALID(parse_comment()); return PROPERTY_SEPARATOR; }
+:					{ RETURN_IF_INVALID(parse_comment()); return PAIR_SEPARATOR; }
+{WHITESPACE} 				{ RETURN_IF_INVALID(parse_comment()); return WHITESPACE;}
+= 					{ RETURN_IF_INVALID(parse_comment()); return ASSIGN;}
+\$ 					{ RETURN_IF_INVALID(parse_comment()); return SCALAR;}
 .					{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext); return TEXT; }
 %%

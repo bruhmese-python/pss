@@ -2,14 +2,32 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <iostream>
 
+#define set_is_var(x) is_var.push_back(x)
+
+char s_buffer[256];
 bool extends_mode_on = false;
+bool active_class_extends = false;
+
+std::unordered_map<std::string,std::string> variables;
+std::vector<bool> is_var;
+
+std::unordered_map<std::string,std::vector<std::string>> classes;
+std::vector<std::string> parent_classes;
+
+char active_class[256];
 
 void register_class(const char* s){
-	if(extends_mode_on)
-		printf("<inheriting class:%s>",s);
-	else
-		printf("\n<class:%s>",s);
+	if(extends_mode_on){
+		parent_classes.push_back(std::string(s));
+	}else{
+		printf("\n%s",s);
+		strcpy(active_class,s);
+	}
 }
 
 void yyerror(const char* s);
@@ -25,15 +43,17 @@ int yylex(void);
 
 %token OPENING_BRACES
 %token CLOSING_BRACES
-%token <string> PROPERTY_NAME
-%token <string> IDENTIFIER
 %token PROPERTY_SEPARATOR
 %token PAIR_SEPARATOR
-%token <string> CLASS_NAME
 %token ASSIGN
 %token EXTENDS
-%token <string> TEXT
+%token SCALAR
 %token WHITESPACE
+
+%token <string> PROPERTY_NAME
+%token <string> IDENTIFIER
+%token <string> CLASS_NAME
+%token <string> TEXT
 %token <string> COMMENT
 
 %nterm <string> valid_value
@@ -48,11 +68,38 @@ css: opt_whitespace css
 	| comment 
 	;
 
-class_definition:  class_names opt_extends_class_names open_brace opt_whitespace property_pairs CLOSING_BRACES opt_whitespace opt_eof;
+class_definition:  class_names opt_extends_class_names open_brace class_body close_brace opt_whitespace opt_eof;
 
-variable: IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt_whitespace PROPERTY_SEPARATOR {printf("<variable[%s] : %s>",$1,$5);};
+class_body: opt_whitespace 
+	| comment 
+	| property_pairs 
+	| class_body opt_whitespace 
+	| class_body comment
+	| class_body property_pairs 
+	;
+	;
 
-open_brace: OPENING_BRACES {extends_mode_on = false;};
+variable: SCALAR IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt_whitespace PROPERTY_SEPARATOR {variables[$2]=std::string($6);set_is_var(true);}
+        |        IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt_whitespace PROPERTY_SEPARATOR {variables[$1]=std::string($5);set_is_var(false);}
+	;
+
+open_brace: 	OPENING_BRACES {
+		  	printf("{");
+			extends_mode_on = false;
+			if(active_class_extends){
+				for(auto p: parent_classes){
+					for(auto s: classes[p]){
+						std::cout<< s <<";";
+						classes[active_class].push_back(s);
+					}
+				}
+				//reset
+				active_class_extends = false;
+				parent_classes.clear();
+			}
+		};
+
+close_brace: 	CLOSING_BRACES {printf("\n}");};
 
 class_names: CLASS_NAME 				{register_class($1);}
 	   | CLASS_NAME opt_whitespace 			{register_class($1);}
@@ -63,21 +110,56 @@ opt_extends_class_names: EMPTY
 		        | extends opt_whitespace class_names 
 			;
 
-extends: EXTENDS {printf("<extends>");extends_mode_on = true;}
+extends: EXTENDS {extends_mode_on = true;active_class_extends = true;}
  
-property_pairs: property_pair opt_whitespace PROPERTY_SEPARATOR opt_whitespace
+property_pairs: property_pair opt_whitespace property_separator opt_whitespace
 	      | property_pair opt_whitespace 
-	      | property_pair opt_whitespace PROPERTY_SEPARATOR opt_whitespace property_pairs opt_whitespace 
+	      | property_pair opt_whitespace property_separator opt_whitespace property_pairs opt_whitespace 
 	      ;
 
-property_pair: PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whitespace valid_value {printf("\n<property pair: %s : %s>",$1,$5);};
+property_pair: PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whitespace valid_value 
+	     {
+		char t[256];
+		sprintf(t,"\n\t%s : %s",$1,$5);
+		printf(t);
+		classes[active_class].push_back(std::string(t));
+	     };
 
 valid_value: TEXT 
-           | IDENTIFIER 
-           | valid_value TEXT {$$=strcat($$,$2);}
-           | valid_value IDENTIFIER {$$=strcat($$,$2);}
-           | valid_value WHITESPACE {$$=strcat($$," ");}
+           | IDENTIFIER 		{auto f_iter= variables.find($1);if(f_iter!=variables.end()) {
+						if(is_var[std::distance(variables.begin(),f_iter)]){
+							char t[256];
+							sprintf(t,"var(--%s)",$1);
+							strcpy($$,t);
+							//std::cout<< "\n$$-ii: "<<$$;
+						}else{
+							$$=strdup(variables[$1].c_str());
+							//std::cout<< "\n$$-ie: "<<$$;
+
+						}
+					}}
+           | valid_value TEXT 		{$$=strcat($$,$2);}
+           | valid_value IDENTIFIER 	{auto f_iter= variables.find($2);if(f_iter!=variables.end()) {
+						if(is_var[std::distance(variables.begin(),f_iter)]){
+							char t[256];
+							sprintf(t,"var(--%s)",$2);
+							$$ = strcat($1,t);
+							//std::cout<< "\n$$e-ii: "<<$$;
+						}else{
+							char t[256];
+							strcpy(t,strdup(variables[$2].c_str()));
+							$$ = strcat($$,t);
+							//std::cout<< "\n$$e-ie: "<<$$;
+						}
+					}else{
+						$$=strcat($$,$2);
+						//std::cout<< "\n$$e-e: "<<$$;
+					}
+					}
+           | valid_value WHITESPACE 	{$$=strcat($$," ");}
            ;
+
+property_separator : PROPERTY_SEPARATOR {printf(";");};
 
 EMPTY: /*empty*/;
 opt_whitespace: EMPTY 
@@ -92,6 +174,18 @@ opt_eof:  EMPTY
 
 %%
 
+void finally(){
+	//print :root block
+	std::cout<< "\n:root{";
+	uint i = 0;
+	for(const auto& [k,v]: variables){
+		if (is_var[i])
+			std::cout<< "\n\t--"<<k<<":"<<v<<";";
+		i++;
+	}
+	std::cout<< "\n}";
+}
+
 int yywrap(void) {return 1;}
 
 void yyerror(const char* s) {
@@ -102,28 +196,29 @@ static int yyreport_syntax_error (const yypcontext_t *ctx) {
 	int res = 0; 
 	YY_LOCATION_PRINT (stderr, *yypcontext_location (ctx));
 	fprintf (stderr, ": syntax error");
- // Report the tokens expected at this point. 
-{ 
-	enum { TOKENMAX = 5 };
-	yysymbol_kind_t expected[TOKENMAX];
-	int n = yypcontext_expected_tokens (ctx, expected, TOKENMAX);
-	if (n < 0) // Forward errors to yyparse. 
-		res = n; 
-	else
-		for (int i = 0; i < n; ++i) 
-			fprintf (stderr, "%s %s", i == 0 ? ": expected" : " or", yysymbol_name (expected[i])); 
-} // Report the unexpected token. 
-{ 
-	yysymbol_kind_t lookahead = yypcontext_token (ctx); 
-	if (lookahead != YYSYMBOL_YYEMPTY) 
-	fprintf (stderr, " before %s at ", yysymbol_name (lookahead)); 
-	YY_LOCATION_PRINT (stderr, *yypcontext_location (ctx));
-} 
-	fprintf (stderr, "\n"); 
-	return res;
+	 // Report the tokens expected at this point. 
+	{ 
+		enum { TOKENMAX = 5 };
+		yysymbol_kind_t expected[TOKENMAX];
+		int n = yypcontext_expected_tokens (ctx, expected, TOKENMAX);
+		if (n < 0) // Forward errors to yyparse. 
+			res = n; 
+		else
+			for (int i = 0; i < n; ++i) 
+				fprintf (stderr, "%s %s", i == 0 ? ": expected" : " or", yysymbol_name (expected[i])); 
+	} // Report the unexpected token. 
+	{ 
+		yysymbol_kind_t lookahead = yypcontext_token (ctx); 
+		if (lookahead != YYSYMBOL_YYEMPTY) 
+		fprintf (stderr, " before %s at ", yysymbol_name (lookahead)); 
+		YY_LOCATION_PRINT (stderr, *yypcontext_location (ctx));
+	} 
+		fprintf (stderr, "\n"); 
+		return res;
 }
 int main() {
     yyparse();
+    finally();
     return 0;
 }
 

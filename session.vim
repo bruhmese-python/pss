@@ -161,13 +161,17 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 1 + 24) / 49)
+exe '1resize ' . ((&lines * 3 + 24) / 49)
+exe '2resize ' . ((&lines * 42 + 24) / 49)
 exe 'vert 2resize ' . ((&columns * 10 + 96) / 193)
-exe '3resize ' . ((&lines * 15 + 24) / 49)
-exe 'vert 3resize ' . ((&columns * 37 + 96) / 193)
-exe 'vert 4resize ' . ((&columns * 37 + 96) / 193)
+exe '3resize ' . ((&lines * 6 + 24) / 49)
+exe 'vert 3resize ' . ((&columns * 42 + 96) / 193)
+exe '4resize ' . ((&lines * 35 + 24) / 49)
+exe 'vert 4resize ' . ((&columns * 42 + 96) / 193)
+exe '5resize ' . ((&lines * 42 + 24) / 49)
+exe 'vert 5resize ' . ((&columns * 139 + 96) / 193)
 argglobal
-terminal ++curwin ++cols=270 ++rows=1 
+terminal ++curwin ++cols=193 ++rows=3 
 let s:term_buf_4 = bufnr()
 balt pcss.l
 setlocal keymap=
@@ -294,12 +298,12 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 0) / 1)
+let s:l = 1 - ((0 * winheight(0) + 1) / 3)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 1
-normal! 02|
+normal! 013|
 wincmd w
 argglobal
 enew
@@ -589,12 +593,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 3 - ((2 * winheight(0) + 7) / 15)
+let s:l = 4 - ((2 * winheight(0) + 3) / 6)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 3
-normal! 028|
+keepjumps 4
+normal! 08|
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 argglobal
@@ -725,12 +729,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 27 - ((3 * winheight(0) + 23) / 46)
+let s:l = 12 - ((11 * winheight(0) + 17) / 35)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 27
-normal! 015|
+keepjumps 12
+normal! 012|
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 argglobal
@@ -861,18 +865,22 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 60 - ((29 * winheight(0) + 31) / 62)
+let s:l = 58 - ((21 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 60
-normal! 083|
+keepjumps 58
+normal! 016|
 wincmd w
-exe '1resize ' . ((&lines * 1 + 24) / 49)
+exe '1resize ' . ((&lines * 3 + 24) / 49)
+exe '2resize ' . ((&lines * 42 + 24) / 49)
 exe 'vert 2resize ' . ((&columns * 10 + 96) / 193)
-exe '3resize ' . ((&lines * 15 + 24) / 49)
-exe 'vert 3resize ' . ((&columns * 37 + 96) / 193)
-exe 'vert 4resize ' . ((&columns * 37 + 96) / 193)
+exe '3resize ' . ((&lines * 6 + 24) / 49)
+exe 'vert 3resize ' . ((&columns * 42 + 96) / 193)
+exe '4resize ' . ((&lines * 35 + 24) / 49)
+exe 'vert 4resize ' . ((&columns * 42 + 96) / 193)
+exe '5resize ' . ((&lines * 42 + 24) / 49)
+exe 'vert 5resize ' . ((&columns * 139 + 96) / 193)
 tabnext
 edit /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.y
 set splitbelow splitright
@@ -1022,7 +1030,7 @@ if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 2
-normal! 035|
+normal! 046|
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 argglobal
@@ -1152,12 +1160,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 41 - ((5 * winheight(0) + 21) / 43)
+let s:l = 81 - ((37 * winheight(0) + 21) / 43)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 41
-normal! 02|
+keepjumps 81
+normal! 0
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 2wincmd w
