@@ -14,12 +14,12 @@ noremap  :reg
 snoremap  "_c
 noremap  :mksession! session.vim
 noremap  I<Del><Del>
-vnoremap  f y:grep '"'
-noremap  i :g/^#include\s*/
-noremap  p ^Dastd::cout<<""";
-noremap  / I//
-nnoremap  a :let @" = substitute(expand('%:t'), '\..*', '', '') . '.hpp' | execute 'edit ' . @"
 nnoremap  f :let @" = substitute(expand('%:t'), '\..*', '', '') . '.cpp' | execute 'edit ' . @"
+nnoremap  a :let @" = substitute(expand('%:t'), '\..*', '', '') . '.hpp' | execute 'edit ' . @"
+noremap  / I//
+noremap  p ^Dastd::cout<<""";
+noremap  i :g/^#include\s*/
+vnoremap  f y:grep '"'
 onoremap  f y:grep '"'
 nnoremap  u qaq:UltiSnipsEdit1:g/snippet /normal 0ee"Ayiwo"Add:bdelete!:split:edit! .snippetsggdG:put a:w:q:echo "Loaded snippets suggestion"
 nnoremap  s ^/ 
@@ -69,31 +69,31 @@ inoremap  u
 inoremap PP "
 inoremap jk 
 inoremap np 
-iabbr std std::
-iabbr gt >
-iabbr lt <
-iabbr le <=
-iabbr ge >=
-iabbr eq ==
-iabbr neq !=
-iabbr indo *
-iabbr bi /
-iabbr rem %
-iabbr plus +
-iabbr minus -
-iabbr rshift >>
-iabbr lshift <<
-iabbr bra ()<Left>
-iabbr of []<Left>
-iabbr cbra {}O
-iabbr esc /[})}\]\>]a
-iabbr cout std::cout<<
-iabbr println std::cout<<"\n"<Left>
-iabbr vector std::vector<><Left>
-iabbr map std::map<,><Left><Left>
-iabbr out std::out<<;<Left>
-iabbr debug std::cout<< "\n":" << ";
 iabbr boilerplate #include<iostream>using namespace std;int main(){	return 0;}<Up><Up>	
+iabbr debug std::cout<< "\n":" << ";
+iabbr out std::out<<;<Left>
+iabbr map std::map<,><Left><Left>
+iabbr vector std::vector<><Left>
+iabbr println std::cout<<"\n"<Left>
+iabbr cout std::cout<<
+iabbr esc /[})}\]\>]a
+iabbr cbra {}O
+iabbr of []<Left>
+iabbr bra ()<Left>
+iabbr lshift <<
+iabbr rshift >>
+iabbr minus -
+iabbr plus +
+iabbr rem %
+iabbr bi /
+iabbr indo *
+iabbr neq !=
+iabbr eq ==
+iabbr ge >=
+iabbr le <=
+iabbr lt <
+iabbr gt >
+iabbr std std::
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set background=dark
@@ -121,7 +121,7 @@ set switchbuf=usetab
 set ttimeout
 set ttimeoutlen=100
 set wildmenu
-set window=48
+set window=42
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -161,17 +161,17 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 3 + 24) / 49)
-exe '2resize ' . ((&lines * 42 + 24) / 49)
-exe 'vert 2resize ' . ((&columns * 10 + 96) / 193)
-exe '3resize ' . ((&lines * 6 + 24) / 49)
-exe 'vert 3resize ' . ((&columns * 42 + 96) / 193)
-exe '4resize ' . ((&lines * 35 + 24) / 49)
-exe 'vert 4resize ' . ((&columns * 42 + 96) / 193)
-exe '5resize ' . ((&lines * 42 + 24) / 49)
-exe 'vert 5resize ' . ((&columns * 139 + 96) / 193)
+exe '1resize ' . ((&lines * 8 + 21) / 43)
+exe '2resize ' . ((&lines * 31 + 21) / 43)
+exe 'vert 2resize ' . ((&columns * 4 + 84) / 168)
+exe '3resize ' . ((&lines * 2 + 21) / 43)
+exe 'vert 3resize ' . ((&columns * 53 + 84) / 168)
+exe '4resize ' . ((&lines * 28 + 21) / 43)
+exe 'vert 4resize ' . ((&columns * 53 + 84) / 168)
+exe '5resize ' . ((&lines * 31 + 21) / 43)
+exe 'vert 5resize ' . ((&columns * 109 + 84) / 168)
 argglobal
-terminal ++curwin ++cols=193 ++rows=3 
+terminal ++curwin ++cols=168 ++rows=8 
 let s:term_buf_4 = bufnr()
 balt pcss.l
 setlocal keymap=
@@ -298,20 +298,20 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 1) / 3)
+let s:l = 2 - ((1 * winheight(0) + 4) / 8)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
-normal! 013|
+keepjumps 2
+normal! 02|
 wincmd w
 argglobal
 enew
 balt /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 let s:cpo_save=&cpo
 set cpo&vim
-imap <buffer> <MiddleMouse> <Plug>IMiddlemouse
 imap <buffer> <LeftMouse> <Plug>ILeftmouse
+imap <buffer> <MiddleMouse> <Plug>IMiddlemouse
 nmap <buffer>  <Plug>NetrwHideEdit
 nmap <buffer> <nowait> <silent>  <Plug>NetrwRefresh
 nmap <buffer> <nowait> <silent>  <Plug>NetrwLocalBrowseCheck
@@ -320,24 +320,24 @@ nmap <buffer> <nowait> <silent> % <Plug>NetrwOpenFile
 nmap <buffer> <nowait> <silent> - <Plug>NetrwBrowseUpDir
 nmap <buffer> <nowait> <silent> C <Plug>NetrwSetChgwin
 nmap <buffer> <nowait> <silent> a <Plug>NetrwHide_a
-nmap <buffer> <nowait> <silent> cd <Plug>NetrwLcd
-nmap <buffer> <nowait> <silent> cB <Plug>NetrwBadd_cB
 nmap <buffer> <nowait> <silent> cb <Plug>NetrwBadd_cb
+nmap <buffer> <nowait> <silent> cB <Plug>NetrwBadd_cB
+nmap <buffer> <nowait> <silent> cd <Plug>NetrwLcd
 nmap <buffer> <nowait> <silent> gb <Plug>NetrwBookHistHandler_gb
-nnoremap <buffer> <F1> :he netrw-quickhelp
-nmap <buffer> <silent> <Plug>Netrw2Leftmouse -
-nmap <buffer> <2-LeftMouse> <Plug>Netrw2Leftmouse
-nmap <buffer> <S-LeftDrag> <Plug>NetrwSLeftdrag
-nmap <buffer> <S-LeftMouse> <Plug>NetrwSLeftmouse
-nmap <buffer> <MiddleMouse> <Plug>NetrwMiddlemouse
-nmap <buffer> <C-LeftMouse> <Plug>NetrwCLeftmouse
-nmap <buffer> <LeftMouse> <Plug>NetrwLeftmouse
-nmap <buffer> <nowait> <silent> <S-CR> <Plug>NetrwTreeSqueeze
-nnoremap <buffer> <silent> <S-Up> :Pexplore
-nnoremap <buffer> <silent> <S-Down> :Nexplore
-nmap <buffer> <C-H> <Plug>NetrwHideEdit
-nmap <buffer> <nowait> <silent> <C-R> <Plug>NetrwServerEdit
 nmap <buffer> <nowait> <silent> <C-L> <Plug>NetrwRefresh
+nmap <buffer> <nowait> <silent> <C-R> <Plug>NetrwServerEdit
+nmap <buffer> <C-H> <Plug>NetrwHideEdit
+nnoremap <buffer> <silent> <S-Down> :Nexplore
+nnoremap <buffer> <silent> <S-Up> :Pexplore
+nmap <buffer> <nowait> <silent> <S-CR> <Plug>NetrwTreeSqueeze
+nmap <buffer> <LeftMouse> <Plug>NetrwLeftmouse
+nmap <buffer> <C-LeftMouse> <Plug>NetrwCLeftmouse
+nmap <buffer> <MiddleMouse> <Plug>NetrwMiddlemouse
+nmap <buffer> <S-LeftMouse> <Plug>NetrwSLeftmouse
+nmap <buffer> <S-LeftDrag> <Plug>NetrwSLeftdrag
+nmap <buffer> <2-LeftMouse> <Plug>Netrw2Leftmouse
+nmap <buffer> <silent> <Plug>Netrw2Leftmouse -
+nnoremap <buffer> <F1> :he netrw-quickhelp
 let &cpo=s:cpo_save
 unlet s:cpo_save
 setlocal keymap=
@@ -593,12 +593,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 4 - ((2 * winheight(0) + 3) / 6)
+let s:l = 9 - ((1 * winheight(0) + 1) / 2)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 4
-normal! 08|
+keepjumps 9
+normal! 018|
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 argglobal
@@ -729,12 +729,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 12 - ((11 * winheight(0) + 17) / 35)
+let s:l = 21 - ((11 * winheight(0) + 14) / 28)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 12
-normal! 012|
+keepjumps 21
+normal! 04|
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
 wincmd w
 argglobal
@@ -865,29 +865,26 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 58 - ((21 * winheight(0) + 21) / 42)
+let s:l = 52 - ((5 * winheight(0) + 15) / 31)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 58
-normal! 016|
+keepjumps 52
+normal! 040|
 wincmd w
-exe '1resize ' . ((&lines * 3 + 24) / 49)
-exe '2resize ' . ((&lines * 42 + 24) / 49)
-exe 'vert 2resize ' . ((&columns * 10 + 96) / 193)
-exe '3resize ' . ((&lines * 6 + 24) / 49)
-exe 'vert 3resize ' . ((&columns * 42 + 96) / 193)
-exe '4resize ' . ((&lines * 35 + 24) / 49)
-exe 'vert 4resize ' . ((&columns * 42 + 96) / 193)
-exe '5resize ' . ((&lines * 42 + 24) / 49)
-exe 'vert 5resize ' . ((&columns * 139 + 96) / 193)
+5wincmd w
+exe '1resize ' . ((&lines * 8 + 21) / 43)
+exe '2resize ' . ((&lines * 31 + 21) / 43)
+exe 'vert 2resize ' . ((&columns * 4 + 84) / 168)
+exe '3resize ' . ((&lines * 2 + 21) / 43)
+exe 'vert 3resize ' . ((&columns * 53 + 84) / 168)
+exe '4resize ' . ((&lines * 28 + 21) / 43)
+exe 'vert 4resize ' . ((&columns * 53 + 84) / 168)
+exe '5resize ' . ((&lines * 31 + 21) / 43)
+exe 'vert 5resize ' . ((&columns * 109 + 84) / 168)
 tabnext
 edit /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.y
 set splitbelow splitright
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
@@ -895,144 +892,6 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 2 + 24) / 49)
-exe '2resize ' . ((&lines * 43 + 24) / 49)
-argglobal
-terminal ++curwin ++cols=193 ++rows=2 
-let s:term_buf_11 = bufnr()
-balt /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.y
-setlocal keymap=
-setlocal noarabic
-setlocal noautoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=terminal
-setlocal nocindent
-setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal cursorlineopt=both
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal noexpandtab
-if &filetype != ''
-setlocal filetype=
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=tcq
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal nomodifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-set relativenumber
-setlocal relativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal scrolloff=-1
-setlocal shiftwidth=8
-setlocal noshortname
-setlocal showbreak=
-setlocal sidescrolloff=-1
-setlocal signcolumn=auto
-setlocal nosmartindent
-setlocal softtabstop=0
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal spelloptions=
-setlocal statusline=
-setlocal suffixesadd=
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != ''
-setlocal syntax=
-endif
-setlocal tabstop=8
-setlocal tagcase=
-setlocal tagfunc=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal noundofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal wincolor=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-let s:l = 2 - ((0 * winheight(0) + 1) / 2)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 2
-normal! 046|
-lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
-wincmd w
 argglobal
 balt /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.hpp
 setlocal keymap=
@@ -1160,28 +1019,23 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 81 - ((37 * winheight(0) + 21) / 43)
+let s:l = 87 - ((25 * winheight(0) + 20) / 41)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 81
+keepjumps 87
 normal! 0
 lcd /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
-wincmd w
-2wincmd w
-exe '1resize ' . ((&lines * 2 + 24) / 49)
-exe '2resize ' . ((&lines * 43 + 24) / 49)
-tabnext 2
+tabnext 1
 set stal=1
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/Makefile
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pcss.l
-badd +0 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss
+badd +81 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.y
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/styles.css
 badd +45 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.l
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pcss/pcss.l
-badd +0 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/y.tab.h
-badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.y
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/pss.hpp
+badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pss/y.tab.h
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pcss
 badd +1 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pcss/styles.css
 badd +10 /media/admin/New\ Volume/prog\ stuff\ c\ plu\ plu/pcss/Makefile

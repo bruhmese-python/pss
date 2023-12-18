@@ -70,7 +70,9 @@ css: opt_whitespace css
 	| comment 
 	;
 
-class_definition:  class_names opt_extends_class_names open_brace class_body close_brace opt_whitespace opt_eof;
+class_definition:  selectors opt_extends_class_names open_brace class_body close_brace opt_whitespace 
+		|  CLASS_NAME opt_whitespace PROPERTY_SEPARATOR opt_whitespace {std::cout<<"\n"<<$1<<";";}
+		;
 
 class_body: opt_whitespace 
 	| comment 
@@ -102,6 +104,11 @@ open_brace: 	OPENING_BRACES {
 		};
 
 close_brace: 	CLOSING_BRACES {printf("\n}");};
+
+selectors: class_names
+	 | IDENTIFIER opt_whitespace
+	 | IDENTIFIER opt_whitespace selectors
+	 ;
 
 class_names: CLASS_NAME 				{register_class($1);}
 	   | CLASS_NAME opt_whitespace 			{register_class($1);}
@@ -173,10 +180,6 @@ opt_whitespace: EMPTY
 	      ;
 		
 comment: COMMENT {printf("%s",$1);}
-
-opt_eof:  EMPTY 
-        | YYEOF
-	;
 
 %%
 
