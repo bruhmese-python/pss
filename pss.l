@@ -42,19 +42,16 @@ COMMENT_END "*/"
 %%
 \{      				{ RETURN_IF_INVALID(parse_comment()); return OPENING_BRACES;}
 \}      				{ RETURN_IF_INVALID(parse_comment()); return CLOSING_BRACES;}
-{IDENTIFIER} 				{ 
-						RETURN_IF_INVALID(parse_comment());
-						int keyword = is_keyword();
-						if(keyword != -1) {return keyword;}
-						else { 
-							strcpy(id_buffer, yytext);
-							BEGIN(property);
-						}
+{IDENTIFIER}(-[A-Za-z_0-9]+)*/{WHITESPACE}*: 		{ RETURN_IF_INVALID(parse_comment());yylval.string = strdup(yytext);return PROPERTY_NAME;}
+{IDENTIFIER}		{ 
+					RETURN_IF_INVALID(parse_comment());
+					int keyword = is_keyword();
+					if(keyword != -1) {return keyword;}
+					else { 
+						yylval.string = strdup(yytext);
+						return IDENTIFIER;
 					}
-<property>(-[A-Za-z_0-9]+)*/{WHITESPACE}*: 		{ RETURN_IF_INVALID(parse_comment());  BEGIN(INITIAL);strcat(id_buffer,yytext);yylval.string = strdup(id_buffer);return PROPERTY_NAME;}
-<property>{WHITESPACE}*/.		{ 
 					/*this idiom up above works for 'anything else a.k.a .*'*/
-					RETURN_IF_INVALID(parse_comment());  BEGIN(INITIAL);yylval.string = strdup(id_buffer);return IDENTIFIER;
 					}
 \.{IDENTIFIER}(-[A-Za-z_0-9]+)* 	{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext);return CLASS_NAME;}
 {COMMENT_BEGIN}				{ commented=true; printf("\n");	ECHO; }
@@ -64,5 +61,6 @@ COMMENT_END "*/"
 {WHITESPACE} 				{ RETURN_IF_INVALID(parse_comment()); return WHITESPACE;}
 = 					{ RETURN_IF_INVALID(parse_comment()); return ASSIGN;}
 \$ 					{ RETURN_IF_INVALID(parse_comment()); return SCALAR;}
+!					{ RETURN_IF_INVALID(parse_comment()); return IMP_MARKER;}
 .					{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext); return TEXT; }
 %%

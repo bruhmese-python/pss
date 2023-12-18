@@ -1,1 +1,9 @@
 project created
+
+!at beginning of property marks it as important
+extends after class name followed by other class names inherits properties of other classes
+
+a = 5px;
+declares a constant which replaces wherever 'a' is found in property values
+$a = 5px;
+declares a variable which replaces wherever 'a' is found in property values

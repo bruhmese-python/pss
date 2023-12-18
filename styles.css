@@ -18,7 +18,7 @@ $alert_padding = 5px;
 margin-bottom : 5px;*/
 .sidebar extends .flex-item{
    /*testing comment*/
-   padding-top : 10px;
+   !padding-top : 10px;
    padding-bottom : 10px;
    height: 100vh;
  }

@@ -18,6 +18,7 @@ std::vector<bool> is_var;
 
 std::unordered_map<std::string,std::vector<std::string>> classes;
 std::vector<std::string> parent_classes;
+bool marked_important = false;
 
 char active_class[256];
 
@@ -49,6 +50,7 @@ int yylex(void);
 %token EXTENDS
 %token SCALAR
 %token WHITESPACE
+%token IMP_MARKER
 
 %token <string> PROPERTY_NAME
 %token <string> IDENTIFIER
@@ -117,11 +119,13 @@ property_pairs: property_pair opt_whitespace property_separator opt_whitespace
 	      | property_pair opt_whitespace property_separator opt_whitespace property_pairs opt_whitespace 
 	      ;
 
-property_pair: PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whitespace valid_value 
+property_pair: opt_important PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whitespace valid_value 
 	     {
 		char t[256];
-		sprintf(t,"\n\t%s : %s",$1,$5);
+		sprintf(t,"\n\t%s : %s",$2,$6);
 		printf(t);
+		if(marked_important)
+			printf(" !important ");
 		classes[active_class].push_back(std::string(t));
 	     };
 
@@ -159,6 +163,8 @@ valid_value: TEXT
            | valid_value WHITESPACE 	{$$=strcat($$," ");}
            ;
 
+opt_important: EMPTY 	  {marked_important = false;}
+	     | IMP_MARKER {marked_important = true;};
 property_separator : PROPERTY_SEPARATOR {printf(";");};
 
 EMPTY: /*empty*/;
