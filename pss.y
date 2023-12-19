@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <numeric>
 #include <iostream>
 
 #define set_is_var(x) is_var.push_back(x)
@@ -128,15 +129,14 @@ property_pairs: property_pair opt_whitespace property_separator opt_whitespace
 
 property_pair: opt_important PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whitespace valid_value 
 	     {
-		char t[256];
-		sprintf(t,"\n\t%s : %s",$2,$6);
-		printf(t);
+		std::string t = "\n\t"+std::string($2)+" : "+std::string($6);
+		std::cout<< t;
 		if(marked_important)
 			printf(" !important ");
-		classes[active_class].push_back(std::string(t));
+		classes[active_class].push_back(t);
 	     };
 
-valid_value: TEXT 
+valid_value: TEXT 			{$$=$1;}
            | IDENTIFIER 		{auto f_iter= variables.find($1);if(f_iter!=variables.end()) {
 						if(is_var[std::distance(variables.begin(),f_iter)]){
 							char t[256];
@@ -185,14 +185,17 @@ comment: COMMENT {printf("%s",$1);}
 
 void finally(){
 	//print :root block
-	std::cout<< "\n:root{";
-	uint i = 0;
-	for(const auto& [k,v]: variables){
-		if (is_var[i])
-			std::cout<< "\n\t--"<<k<<":"<<v<<";";
-		i++;
+	bool any_vars = std::accumulate(is_var.begin(), is_var.end(), false, [](bool a,bool b){return a or b;});
+	if(any_vars){
+		std::cout<< "\n:root{";
+		uint i = 0;
+		for(const auto& [k,v]: variables){
+			if (is_var[i])
+				std::cout<< "\n\t--"<<k<<":"<<v<<";";
+			i++;
+		}
+		std::cout<< "\n}";
 	}
-	std::cout<< "\n}";
 }
 
 int yywrap(void) {return 1;}

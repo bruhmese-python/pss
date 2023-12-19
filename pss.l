@@ -32,7 +32,7 @@ int yylex(void);
 %}
 
 IDENTIFIER [A-Za-z_]+[A-Za-z_0-9]*
-WHITESPACE [" "\t\n]
+WHITESPACE [ \t\n]
 COMMENT_BEGIN "/*"
 COMMENT_END "*/"
 
@@ -62,5 +62,5 @@ COMMENT_END "*/"
 = 					{ RETURN_IF_INVALID(parse_comment()); return ASSIGN;}
 \$ 					{ RETURN_IF_INVALID(parse_comment()); return SCALAR;}
 !					{ RETURN_IF_INVALID(parse_comment()); return IMP_MARKER;}
-.					{ RETURN_IF_INVALID(parse_comment()); yylval.string = strdup(yytext); return TEXT; }
+.					{ RETURN_IF_INVALID(parse_comment());yylval.string = strdup(yytext); return TEXT; }
 %%
