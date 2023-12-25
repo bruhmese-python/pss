@@ -17,6 +17,7 @@ bool commented = false;
 
 int is_keyword(){
 	if(strcmp(yytext,"extends")==0) {return EXTENDS;}
+	if(strcmp(yytext,"alias")==0) {return ALIAS;}
 	return -1;
 }
 int parse_comment(){

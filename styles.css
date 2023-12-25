@@ -1,5 +1,9 @@
 $alert_padding = 5px;
 
+body .flex{
+	background-color:red;
+}
+
 .flex-container {
   display: flex;
   flex-wrap: wrap;
@@ -8,6 +12,8 @@ $alert_padding = 5px;
   align-items: auto;
   align-content: start;
 }
+
+.flex-container alias .unflexed-container;
 
 .flex-item {
   flex: 0 0 auto;

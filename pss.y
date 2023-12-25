@@ -32,6 +32,21 @@ void register_class(const char* s){
 	}
 }
 
+void output_properties(){
+	extends_mode_on = false;
+	if(active_class_extends){
+		for(auto p: parent_classes){
+			for(auto s: classes[p]){
+				std::cout<< s <<";";
+				classes[active_class].push_back(s);
+			}
+		}
+		//reset
+		active_class_extends = false;
+		parent_classes.clear();
+	}
+}
+
 void yyerror(const char* s);
 int yylex(void);
 
@@ -49,6 +64,7 @@ int yylex(void);
 %token PAIR_SEPARATOR
 %token ASSIGN
 %token EXTENDS
+%token ALIAS
 %token SCALAR
 %token WHITESPACE
 %token IMP_MARKER
@@ -67,9 +83,22 @@ css: opt_whitespace css
 	| variable css 
 	| class_definition css
 	| comment css  
+	| aliasing css
 	| class_definition
 	| comment 
+	| aliasing
 	;
+
+aliasing: CLASS_NAME opt_whitespace ALIAS opt_whitespace CLASS_NAME opt_whitespace PROPERTY_SEPARATOR 
+	{
+		register_class($5);
+		std::cout<<"{";
+		extends_mode_on = true;
+		register_class($1);
+		active_class_extends = true;
+		output_properties();
+		std::cout<<"\n}";
+	};
 
 class_definition:  selectors opt_extends_class_names open_brace class_body close_brace opt_whitespace 
 		|  CLASS_NAME opt_whitespace PROPERTY_SEPARATOR opt_whitespace {std::cout<<"\n"<<$1<<";";}
@@ -90,25 +119,14 @@ variable: SCALAR IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt
 
 open_brace: 	OPENING_BRACES {
 		  	printf("{");
-			extends_mode_on = false;
-			if(active_class_extends){
-				for(auto p: parent_classes){
-					for(auto s: classes[p]){
-						std::cout<< s <<";";
-						classes[active_class].push_back(s);
-					}
-				}
-				//reset
-				active_class_extends = false;
-				parent_classes.clear();
-			}
+			output_properties();
 		};
 
 close_brace: 	CLOSING_BRACES {printf("\n}");};
 
 selectors: class_names
-	 | IDENTIFIER opt_whitespace
-	 | IDENTIFIER opt_whitespace selectors
+	 | IDENTIFIER opt_whitespace { printf("\n%s",$1);}
+	 | IDENTIFIER opt_whitespace selectors { printf("\n%s",$1);}
 	 ;
 
 class_names: CLASS_NAME 				{register_class($1);}
