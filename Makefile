@@ -7,3 +7,6 @@ clean:
 	rm ./pss
 	rm y.tab.c y.tab.h
 	rm lex.yy.c 
+
+script:
+	cp ./pss "/home/admin/Desktop/New Volume/scripts"
