@@ -155,7 +155,6 @@ property_pair: opt_important PROPERTY_NAME opt_whitespace PAIR_SEPARATOR opt_whi
 	     };
 
 valid_value: TEXT 			{$$=$1;}
-           | CLASS_NAME 		{$$=$1;}
            | IDENTIFIER 		{auto f_iter= variables.find($1);if(f_iter!=variables.end()) {
 						if(is_var[std::distance(variables.begin(),f_iter)]){
 							char t[256];
@@ -168,8 +167,7 @@ valid_value: TEXT 			{$$=$1;}
 
 						}
 					}}
-           | valid_value TEXT 		{$$=strcat($$,$2);} 
-           | valid_value CLASS_NAME 	{$$=strcat($$,$2);} 
+           | valid_value TEXT 		{$$=strcat($$,$2);}
            | valid_value IDENTIFIER 	{auto f_iter= variables.find($2);if(f_iter!=variables.end()) {
 						if(is_var[std::distance(variables.begin(),f_iter)]){
 							char t[256];
