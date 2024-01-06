@@ -2,6 +2,7 @@ project created
 
 !at beginning of property marks it as important
 extends after class name followed by other class names inherits properties of other classes
+alias copies and renames the class
 
 a = 5px;
 declares a constant which replaces wherever 'a' is found in property values
