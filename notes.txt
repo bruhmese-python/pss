@@ -8,3 +8,5 @@ a = 5px;
 declares a constant which replaces wherever 'a' is found in property values
 $a = 5px;
 declares a variable which replaces wherever 'a' is found in property values
+a = [v1,v2,v3] 
+declares a variabl to which a random value is assigned from the array
