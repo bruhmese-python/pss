@@ -1,4 +1,5 @@
 $alert_padding = 5px;
+color1 = [#03AED2,#FDDE55];
 
 body .flex{
 	background-color:red;
@@ -11,6 +12,7 @@ body .flex{
   justify-content: start;
   align-items: auto;
   align-content: start;
+  background-color:color1;
 }
 
 .flex-container alias .unflexed-container;

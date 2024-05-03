@@ -3,10 +3,12 @@
 #include <stdbool.h>
 #include <string.h>
 #include <string>
+#include <sstream>
 #include <unordered_map>
 #include <vector>
 #include <numeric>
 #include <iostream>
+#include <random>
 
 #define set_is_var(x) is_var.push_back(x)
 
@@ -46,6 +48,26 @@ void output_properties(){
 		parent_classes.clear();
 	}
 }
+const int random_index(size_t limit=0) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, limit);
+
+        // Generate a random index
+        return  dis(gen);
+}
+
+const char* select_random_from_values(const std::string& input) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::stringstream ss(input);
+
+    while (std::getline(ss, token, ',')) {
+        tokens.push_back(token);
+    }
+
+    return tokens[random_index(tokens.size()-1)].c_str();
+}
 
 void yyerror(const char* s);
 int yylex(void);
@@ -76,6 +98,7 @@ int yylex(void);
 %token <string> COMMENT
 
 %nterm <string> valid_value
+%nterm <string> array
 
 %%
 
@@ -113,8 +136,11 @@ class_body: opt_whitespace
 	;
 	;
 
+array:	OPENING_BRACES valid_value CLOSING_BRACES {$$=strdup(select_random_from_values($2));};
+
 variable: SCALAR IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt_whitespace PROPERTY_SEPARATOR {variables[$2]=std::string($6);set_is_var(true);}
         |        IDENTIFIER opt_whitespace ASSIGN opt_whitespace valid_value opt_whitespace PROPERTY_SEPARATOR {variables[$1]=std::string($5);set_is_var(false);}
+        |        IDENTIFIER opt_whitespace ASSIGN opt_whitespace array opt_whitespace PROPERTY_SEPARATOR {variables[$1]=std::string($5);set_is_var(false);}
 	;
 
 open_brace: 	OPENING_BRACES {

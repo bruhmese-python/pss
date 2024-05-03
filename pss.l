@@ -58,6 +58,8 @@ COMMENT_END "*/"
 {COMMENT_BEGIN}				{ commented=true; printf("\n");	ECHO; }
 {COMMENT_END}				{ commented=false;		ECHO; }
 ;					{ RETURN_IF_INVALID(parse_comment()); return PROPERTY_SEPARATOR; }
+\[					{ RETURN_IF_INVALID(parse_comment()); return OPENING_BRACES; }
+\]					{ RETURN_IF_INVALID(parse_comment()); return CLOSING_BRACES; }
 :					{ RETURN_IF_INVALID(parse_comment()); return PAIR_SEPARATOR; }
 {WHITESPACE} 				{ RETURN_IF_INVALID(parse_comment()); return WHITESPACE;}
 = 					{ RETURN_IF_INVALID(parse_comment()); return ASSIGN;}
